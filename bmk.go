@@ -22,6 +22,10 @@ type bookmark struct {
 var (
 	someResult   bool
 	bookmarkList []bookmark
+	commandColor = color.New(color.FgGreen)
+	linkColor    = color.New(color.FgYellow).Add(color.Underline)
+	nameColor    = color.New(color.FgCyan).Add(color.Bold)
+	idColor      = color.New(color.FgGreen).Add(color.Bold)
 )
 
 func init() {}
@@ -59,21 +63,12 @@ func searchBookmark(text string) {
 	bookmarkList = append(bookmarkList, bookmark{id: 1, url: "http://google.com", name: "Google", tag: "google"})
 	bookmarkList = append(bookmarkList, bookmark{id: 2, url: "http://gmail.com", name: "Gmail", tag: "gmail"})
 
-	commandColor := color.New(color.FgGreen)
-	linkColor := color.New(color.FgYellow).Add(color.Underline)
-	nameColor := color.New(color.FgCyan).Add(color.Bold)
-	idColor := color.New(color.FgGreen).Add(color.Bold)
-
 	commandColor.Print("Searching bookmark(s) with tag(s): ")
 	nameColor.Println(text)
 
 	for _, item := range bookmarkList {
 		if strings.Contains(item.tag, text) {
-			idString := strconv.Itoa(item.id)
-			idColor.Print("[" + idString + "]")
-			nameColor.Print(" " + item.name + " ")
-			linkColor.Println(item.url)
-
+			printBookmark(item)
 			someResult = true
 		}
 	}
@@ -81,6 +76,13 @@ func searchBookmark(text string) {
 	if !someResult {
 		color.Red("No bookmarks with this tag(s)")
 	}
+}
+
+func printBookmark(bmk bookmark) {
+	idString := strconv.Itoa(bmk.id)
+	idColor.Print("[" + idString + "]")
+	nameColor.Print(" " + bmk.name + " ")
+	linkColor.Println(bmk.url)
 }
 
 func printUsage() {
