@@ -101,7 +101,8 @@ func addBookmark() {
 	url, _ := reader.ReadString('\n')
 	fmt.Print("Enter tag: ")
 	tag, _ := reader.ReadString('\n')
-	fmt.Println(name + " " + url + " " + tag)
+	newBmk := bookmark{42, url, name, tag}
+	printBookmark(newBmk)
 }
 
 func openbrowser(id int) {
