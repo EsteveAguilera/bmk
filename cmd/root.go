@@ -42,12 +42,15 @@ func initConfig() {
 	viper.SetConfigFile("./bmk.yaml")
 	viper.SetConfigType("yaml")
 
-	viper.SetDefault("color", true)
+	// Use colored output by default
+	viper.SetDefault("nocolor", false)
 
-	// If no config file is found, create it!
 	if err := viper.ReadInConfig(); err != nil {
 		viper.WriteConfig()
 	}
+
+	// Load color output config
+	color.NoColor = viper.GetBool("nocolor")
 }
 
 func printBookmark(bmk bookmark) {
