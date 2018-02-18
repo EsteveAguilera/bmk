@@ -13,9 +13,7 @@ var searchCmd = &cobra.Command{
 	Long:  `Search bookmarks for name or tags`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		bookmarkList := []bookmark{}
-		bookmarkList = append(bookmarkList, bookmark{id: 1, url: "http://google.com", name: "Google", tag: "google"})
-		bookmarkList = append(bookmarkList, bookmark{id: 2, url: "http://gmail.com", name: "Gmail", tag: "gmail"})
+		bookmarkList := loadBookmarks()
 
 		var someResult bool
 
@@ -24,7 +22,7 @@ var searchCmd = &cobra.Command{
 			nameColor.Println(args[0])
 
 			for _, item := range bookmarkList {
-				if strings.Contains(item.tag, args[0]) {
+				if strings.Contains(item.Tag, args[0]) {
 					printBookmark(item)
 					someResult = true
 				}

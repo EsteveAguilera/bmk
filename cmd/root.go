@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strconv"
 
@@ -44,6 +46,7 @@ func initConfig() {
 
 	// Use colored output by default
 	viper.SetDefault("nocolor", false)
+	viper.SetDefault("filename", "bookmarks.json")
 
 	if err := viper.ReadInConfig(); err != nil {
 		viper.WriteConfig()
@@ -54,15 +57,34 @@ func initConfig() {
 }
 
 func printBookmark(bmk bookmark) {
-	idString := strconv.Itoa(bmk.id)
+	idString := strconv.Itoa(bmk.ID)
 	idColor.Print("[" + idString + "]")
-	nameColor.Print(" " + bmk.name + " ")
-	linkColor.Println(bmk.url)
+	nameColor.Print(" " + bmk.Name + " ")
+	linkColor.Print(bmk.URL)
+}
+
+func loadBookmarks() []bookmark {
+	var bookmarkList []bookmark
+	data, err := ioutil.ReadFile(viper.GetString("filename"))
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		err = json.Unmarshal(data, &bookmarkList)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+	return bookmarkList
+}
+
+func saveBookmarks(bmkList []bookmark) {
+	b, _ := json.Marshal(bmkList)
+	_ = ioutil.WriteFile(viper.GetString("filename"), b, 0644)
 }
 
 type bookmark struct {
-	id   int
-	url  string
-	name string
-	tag  string
+	ID   int    ` json:"id"`
+	URL  string `json:"url"`
+	Name string `json:"name"`
+	Tag  string `json:"tag"`
 }

@@ -16,8 +16,8 @@ var openCmd = &cobra.Command{
 bmk open 42`,
 	Run: func(cmd *cobra.Command, args []string) {
 		bookmarkList := []bookmark{}
-		bookmarkList = append(bookmarkList, bookmark{id: 1, url: "http://google.com", name: "Google", tag: "google"})
-		bookmarkList = append(bookmarkList, bookmark{id: 2, url: "http://gmail.com", name: "Gmail", tag: "gmail"})
+		bookmarkList = append(bookmarkList, bookmark{ID: 1, URL: "http://google.com", Name: "Google", Tag: "google"})
+		bookmarkList = append(bookmarkList, bookmark{ID: 2, URL: "http://gmail.com", Name: "Gmail", Tag: "gmail"})
 
 		var err error
 		var id int
@@ -29,8 +29,8 @@ bmk open 42`,
 		var urlToOpen string
 
 		for _, item := range bookmarkList {
-			if id == item.id {
-				urlToOpen = item.url
+			if id == item.ID {
+				urlToOpen = item.URL
 			}
 		}
 
