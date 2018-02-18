@@ -20,13 +20,11 @@ var addCmd = &cobra.Command{
 		url, _ := reader.ReadString('\n')
 		fmt.Print("Enter tag: ")
 		tag, _ := reader.ReadString('\n')
-		//newBmk := bookmark{42, url, name, tag}
 
 		bookmarkList := loadBookmarks()
 		bookmarkList = append(bookmarkList, bookmark{ID: len(bookmarkList) + 1, URL: url, Name: name, Tag: tag})
 		for _, item := range bookmarkList {
 			printBookmark(item)
-
 		}
 		saveBookmarks(bookmarkList)
 	},

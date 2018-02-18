@@ -25,6 +25,7 @@ var commandColor = color.New(color.FgGreen)
 var linkColor = color.New(color.FgYellow).Add(color.Underline)
 var nameColor = color.New(color.FgCyan).Add(color.Bold)
 var idColor = color.New(color.FgGreen).Add(color.Bold)
+var bookmarkFileKey = "filename"
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
@@ -46,7 +47,7 @@ func initConfig() {
 
 	// Use colored output by default
 	viper.SetDefault("nocolor", false)
-	viper.SetDefault("filename", "bookmarks.json")
+	viper.SetDefault(bookmarkFileKey, "bookmarks.json")
 
 	if err := viper.ReadInConfig(); err != nil {
 		viper.WriteConfig()
@@ -65,13 +66,13 @@ func printBookmark(bmk bookmark) {
 
 func loadBookmarks() []bookmark {
 	var bookmarkList []bookmark
-	data, err := ioutil.ReadFile(viper.GetString("filename"))
+	data, err := ioutil.ReadFile(viper.GetString(bookmarkFileKey))
 	if err != nil {
 		fmt.Println(err)
 	} else {
 		err = json.Unmarshal(data, &bookmarkList)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Println("No bookmarks found!")
 		}
 	}
 	return bookmarkList
@@ -79,11 +80,11 @@ func loadBookmarks() []bookmark {
 
 func saveBookmarks(bmkList []bookmark) {
 	b, _ := json.Marshal(bmkList)
-	_ = ioutil.WriteFile(viper.GetString("filename"), b, 0644)
+	_ = ioutil.WriteFile(viper.GetString(bookmarkFileKey), b, 0644)
 }
 
 type bookmark struct {
-	ID   int    ` json:"id"`
+	ID   int    `json:"id"`
 	URL  string `json:"url"`
 	Name string `json:"name"`
 	Tag  string `json:"tag"`

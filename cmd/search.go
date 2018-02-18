@@ -14,7 +14,6 @@ var searchCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		bookmarkList := loadBookmarks()
-
 		var someResult bool
 
 		if len(args) > 0 {
