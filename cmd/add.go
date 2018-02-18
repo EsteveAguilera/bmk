@@ -23,7 +23,7 @@ var addCmd = &cobra.Command{
 		//newBmk := bookmark{42, url, name, tag}
 
 		bookmarkList := loadBookmarks()
-		bookmarkList = append(bookmarkList, bookmark{ID: 42, URL: url, Name: name, Tag: tag})
+		bookmarkList = append(bookmarkList, bookmark{ID: len(bookmarkList) + 1, URL: url, Name: name, Tag: tag})
 		for _, item := range bookmarkList {
 			printBookmark(item)
 
