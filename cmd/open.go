@@ -1,8 +1,9 @@
 package cmd
 
 import (
-	"log"
+	"fmt"
 	"os/exec"
+	"runtime"
 	"strconv"
 
 	"github.com/spf13/cobra"
@@ -20,24 +21,37 @@ bmk open 42`,
 		var id int
 
 		if id, err = strconv.Atoi(args[0]); err != nil {
-			panic(err)
+			fmt.Println("Not a valid command")
+			return
 		}
 
-		var urlToOpen string
-
-		for _, item := range bookmarkList {
-			if id == item.ID {
-				urlToOpen = item.URL
-			}
+		if id > len(bookmarkList) {
+			fmt.Println("No bookmark with this ID")
+			return
 		}
 
-		err = exec.Command("open", urlToOpen).Start()
-		if err != nil {
-			log.Fatal(err)
-		}
+		openUrl(bookmarkList[(id - 1)].URL)
+
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(openCmd)
+}
+
+func openUrl(url string) error {
+	var cmd string
+	var args []string
+
+	switch runtime.GOOS {
+	case "windows":
+		cmd = "cmd"
+		args = []string{"/c", "start"}
+	case "darwin":
+		cmd = "open"
+	default: // "linux", "freebsd", "openbsd", "netbsd"
+		cmd = "xdg-open"
+	}
+	args = append(args, url)
+	return exec.Command(cmd, args...).Start()
 }
